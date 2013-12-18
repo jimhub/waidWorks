@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="us">
+	<head>
+		<meta charset="utf-8">
+		<title>WaidEdit - A Living Game Editor</title>
+
+		<link href="css/ui-darkness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
+
+		<script src="js/lua5.1.5.min.js"></script>
+		<script src="js/lua-libs.js"></script>
+		<script src="js/lua-threejs-bindings.js"></script>
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="js/three.min.js"></script>
+		<script src="js/waid.js"></script>
+
+		<script src="js/jquery-ui-1.10.3.custom.js"></script>
+
+		<script>
+			$(function() {
+	            $("#mainMenu").menubar();
+	        });
+		</script>
+
+	    <style>
+	    	body, html {
+			    height:100%;
+			    margin:0;
+			    padding:0;
+			}
+			
+	        #mainMenu { margin: 0; }
+	        #webGLViewport { width: 50%; height: auto; bottom: 20px; float: left; }
+
+	        #windowContainer {
+	        	position: absolute;
+	        	top: 150px;
+	        	bottom: 20px;
+	        	height: auto;
+	        }
+	     </style>
+	</head>
+
+	<body>
+
+		<ul id="mainMenu" class="menubar">
+		    <li>
+		        <a href="#navigation">File</a>
+		        <ul>
+		            <li><a href="#open">Open</a></li>
+		            <li><a href="#save">Save</a></li>
+		            <li><a href="#import">Import</a></li>
+		        </ul>
+		    </li>
+		    <li>
+		        <a href="#View">Edit</a>
+		        <ul>
+		            <li>
+		            	<a href="#meh">Meh?</a>
+		            	<ul>
+			                <li><a href="#open">Open</a></li>
+			                <li><a href="#save">Save</a></li>
+			                <li><a href="#import">Import</a></li>
+			            </ul>
+		            </li>
+		        </ul>
+		    </li>
+		    <li><a href="#edit">Object</a>
+		        <ul>
+		            <li><a href="#best">Empty</a></li>
+		            <li><a href="#worst">Cube</a></li>
+		        </ul>
+		   	</li>
+		    <li><a href="#edit">Layout</a>
+		        <ul>
+		            <li><a href="#best">Best Layout</a></li>
+		            <li><a href="#worst">Worst Layout</a></li>
+		        </ul>
+		   	</li>
+		    <li>
+		        <a href="#About">About</a>
+		        <ul>
+		            <li><a href="#about">About this software</a></li>
+		            <li>-</li>
+		            <li><a href="#site">Software Home</a></li>
+		            <li><a href="#documentation">Documentation</a></li>
+		            <li><a href="#support">Support Forums</a></li>
+		            <li><a href="#feedback">Feedback</a></li>
+		        </ul>
+		    </li>
+		</ul>
+
+		<div id="windowContainer"></div>
+			<div id="sceneWindow"></div>
+			<div id="webGLViewport"></div>
+			<div id="propertyWindow"></div>
+		</div>
+	</body>
+</html>
