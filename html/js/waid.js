@@ -1,30 +1,57 @@
 
 $(function() {
 
+
+	var container = $("#windowContainer");
+	var sceneTree = $("#sceneTreeWindow");
 	var canvas = $("#webGLViewport");
+	var properties = $("#propertyWindow");
+
+	var menuBarHeight = 41;
+	var bottomBarHeight = 20;
+
+	var sceneTreeWidth = 250;
+	var propertiesWidth = 250;
 
 	var w = canvas.width();
 	var h = canvas.height();
-
-	console.log($("#mainMenu").height());
 	
 	var scene = new THREE.Scene();
 	var camera = new THREE.PerspectiveCamera( 75, w / h, 0.1, 1000 );
 
 	var renderer = new THREE.WebGLRenderer();
-	renderer.setSize( w, h );
-	
+
 	canvas.html(renderer.domElement);
 
-	canvas.resizable({
-  		resize: function( event, ui ) {
-			var width = canvas.width();
-			var height = canvas.height();
-  			renderer.setSize(width, height);
-		    camera.aspect = width / height;
-		    camera.updateProjectionMatrix();
-  		}
-	});
+	var resizeEverything = function() {
+		
+		var cW = $(window).width();
+		var cH = $(window).height() - menuBarHeight - bottomBarHeight;
+
+		container.offset({top: menuBarHeight, left:0});
+		container.width(cW);
+		container.height(cH);
+
+		sceneTree.offset({top: menuBarHeight, left: 0});
+		sceneTree.width(sceneTreeWidth);
+		sceneTree.height(cH);
+
+		canvas.offset({top: menuBarHeight, left: sceneTreeWidth});
+		canvas.width(cW - sceneTreeWidth - propertiesWidth);
+		canvas.height(cH);
+
+		var canvasWidth = canvas.width();
+		var height = canvas.height();
+		renderer.setSize(canvasWidth, height);
+	    camera.aspect = canvasWidth / height;
+	    camera.updateProjectionMatrix();
+
+	    properties.offset({top: menuBarHeight, left: sceneTreeWidth + canvasWidth});
+		properties.width(propertiesWidth);
+		properties.height(cH);
+	};
+
+	resizeEverything();
 
 	camera.position.z = 5;
 

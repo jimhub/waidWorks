@@ -26,16 +26,32 @@
 			    height:100%;
 			    margin:0;
 			    padding:0;
+
+			    overflow: hidden;
 			}
 			
 	        #mainMenu { margin: 0; }
-	        #webGLViewport { width: 50%; height: auto; bottom: 20px; float: left; }
 
 	        #windowContainer {
 	        	position: absolute;
-	        	top: 150px;
-	        	bottom: 20px;
-	        	height: auto;
+	        	background: #333333;
+	        }
+
+	        #sceneTreeWindow {
+	        	position: absolute;
+	        	background: #666666;
+	        }
+
+	        #webGLViewport {
+	        	position: absolute;
+	        	background: #666666;
+	        	padding: 0 0 0 0;
+	        	margin: 0 0 0 0;
+	        }
+
+	        #propertyWindow {
+	        	position: absolute;
+	        	background: #AA6666;
 	        }
 	     </style>
 	</head>
@@ -90,7 +106,7 @@
 		</ul>
 
 		<div id="windowContainer"></div>
-			<div id="sceneWindow"></div>
+			<div id="sceneTreeWindow"></div>
 			<div id="webGLViewport"></div>
 			<div id="propertyWindow"></div>
 		</div>
