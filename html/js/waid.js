@@ -14,12 +14,16 @@ $(function() {
 	var CAM_BACK = 83;
 
 	var camSpeed = 0.1;
-	var mouseSens = 0.001;
+	var mouseSens = 0.002;
 
 	var mouseX = 0;
 	var mouseY = 0;
 	var mouseMoveX = 0;
 	var mouseMoveY = 0;
+
+	var havePointerLock = 'pointerLockElement' in document ||
+    	'mozPointerLockElement' in document ||
+    	'webkitPointerLockElement' in document;
 
 	var resetViewPortKeys = function() {
 		viewPortKeyStates[MOUSE_LMB] = false;
@@ -74,6 +78,14 @@ $(function() {
 
 	canvas.html(renderer.domElement);
 
+	canvas.get(0).requestPointerLock = canvas.get(0).requestPointerLock ||
+	     canvas.get(0).mozRequestPointerLock ||
+	     canvas.get(0).webkitRequestPointerLock;
+
+	document.exitPointerLock = document.exitPointerLock ||
+				   document.mozExitPointerLock ||
+				   document.webkitExitPointerLock;
+	
 	var resizeEverything = function() {
 		
 		var cW = $(window).width();
@@ -119,10 +131,21 @@ $(function() {
 
 	canvas.mousedown(function(e) {
 		viewPortKeyStates[e.which] = true;
+
+		if(e.which == 3) {
+		    if(havePointerLock) {
+				// Ask the browser to lock the pointer
+				canvas.get(0).requestPointerLock();
+		    }
+		}
 	});
 
 	canvas.mouseup(function(e) {
 		viewPortKeyStates[e.which] = false;
+
+		if(e.which == 3 && havePointerLock) {
+			document.exitPointerLock();
+		}
 	});
 
 	canvas.keyup(function(e) {
@@ -137,13 +160,19 @@ $(function() {
 		resetViewPortKeys();
 	});
 
-	canvas.mousemove(function(e) {
-		mouseMoveX = e.clientX - mouseX;
-		mouseMoveY = e.clientY - mouseY;
+	var rotQuaternion = new THREE.Quaternion();
+	var rotationVector = new THREE.Vector3( 0, 0, 0 );
 
-		mouseX = e.clientX;
-		mouseY = e.clientY;
-	});
+	document.addEventListener( 'mousemove', function(e) {
+		if(viewPortKeyStates[MOUSE_RMB]) {
+			var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+			var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+
+			rotationVector.set(-movementY * mouseSens, -movementX * mouseSens, 0);
+			rotQuaternion.set( rotationVector.x, rotationVector.y, rotationVector.z, 1 ).normalize();
+		 	camera.quaternion.multiply( rotQuaternion );
+		}
+	}, false);
 
 	camera.position.y = 5;
 	camera.position.z = 5;
@@ -178,13 +207,6 @@ $(function() {
 		if(viewPortKeyStates[CAM_BACK]) {
 			camera.translateZ(camSpeed);
 		}
-
-
-		if(viewPortKeyStates[MOUSE_RMB]) {
-			camera.rotation.x -= mouseMoveY * mouseSens;
-			camera.rotation.y -= mouseMoveX * mouseSens;
-		}
-
 
 		C.lua_getglobal(L, "render");
 
