@@ -608,6 +608,7 @@ button.ui-button::-moz-focus-inner {
 
 .ui-menubar-item {
 	float: left;
+	cursor: pointer;
 }
 
 .ui-menubar .ui-button {

@@ -1,11 +1,62 @@
 
 $(function() {
+	THREE.Vector3.ZERO = new THREE.Vector3(0, 0, 0);
 
+	var viewPortKeyStates = new Object();
+
+	var MOUSE_LMB = 1;
+	var MOUSE_MMB = 2;
+	var MOUSE_RMB = 3;
+
+	var CAM_LEFT = 65;
+	var CAM_RIGHT = 68;
+	var CAM_FWD = 87;
+	var CAM_BACK = 83;
+
+	var camSpeed = 0.1;
+	var mouseSens = 0.001;
+
+	var mouseX = 0;
+	var mouseY = 0;
+	var mouseMoveX = 0;
+	var mouseMoveY = 0;
+
+	var resetViewPortKeys = function() {
+		viewPortKeyStates[MOUSE_LMB] = false;
+		viewPortKeyStates[MOUSE_MMB] = false;
+		viewPortKeyStates[MOUSE_RMB] = false;
+
+		viewPortKeyStates[CAM_LEFT] = false;
+		viewPortKeyStates[CAM_RIGHT] = false;
+		viewPortKeyStates[CAM_FWD] = false;
+		viewPortKeyStates[CAM_BACK] = false;
+	};
+
+	resetViewPortKeys();
+
+	$("#mainMenu").menubar({
+        select: function(event, ui) {
+            var tag = ui.item.children().attr('tag');
+
+            switch(tag) {
+            	case "addCube":
+            		var geometry = new THREE.CubeGeometry(1,1,1);
+					var material = new THREE.MeshLambertMaterial( { color: 0xFFFFFF } );
+					var cube = new THREE.Mesh( geometry, material );
+					scene.add( cube );
+            		break;
+            	default:
+            		console.log("Unknown menu action");
+            		break;
+            }
+        }
+    });
 
 	var container = $("#windowContainer");
 	var sceneTree = $("#sceneTreeWindow");
 	var canvas = $("#webGLViewport");
 	var properties = $("#propertyWindow");
+	var bottomBar = $("#bottomBar");
 
 	var menuBarHeight = 41;
 	var bottomBarHeight = 20;
@@ -49,18 +100,91 @@ $(function() {
 	    properties.offset({top: menuBarHeight, left: sceneTreeWidth + canvasWidth});
 		properties.width(propertiesWidth);
 		properties.height(cH);
+
+		bottomBar.offset({top: menuBarHeight+cH, left: 0});
+		bottomBar.width(cW);
+		bottomBar.height(bottomBarHeight);
+
 	};
+
+	$( window ).resize(resizeEverything);
 
 	resizeEverything();
 
+	canvas.keydown(function(e) {
+		//console.log(e.which);
+
+		viewPortKeyStates[e.which] = true;
+	});
+
+	canvas.mousedown(function(e) {
+		viewPortKeyStates[e.which] = true;
+	});
+
+	canvas.mouseup(function(e) {
+		viewPortKeyStates[e.which] = false;
+	});
+
+	canvas.keyup(function(e) {
+		viewPortKeyStates[e.which] = false;
+	});
+
+	canvas.click(function(e) {
+		canvas.focus();
+	});
+
+	canvas.focusout(function(e) {
+		resetViewPortKeys();
+	});
+
+	canvas.mousemove(function(e) {
+		mouseMoveX = e.clientX - mouseX;
+		mouseMoveY = e.clientY - mouseY;
+
+		mouseX = e.clientX;
+		mouseY = e.clientY;
+	});
+
+	camera.position.y = 5;
 	camera.position.z = 5;
 
-	// create a point light
+	camera.lookAt(THREE.Vector3.ZERO);
+
+	// create some default lights
+	var light = new THREE.AmbientLight( 0x333333 ); // soft white light
+	scene.add( light );
+
+	var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+	directionalLight.position.set( 1, 1, 1 );
+	scene.add( directionalLight );
 
 	var FPS = 0, frames = 0;
 
 	var render = function () {
 		requestAnimationFrame(render);
+
+		if(viewPortKeyStates[CAM_LEFT]) {
+			camera.translateX(-camSpeed);
+		}
+
+		if(viewPortKeyStates[CAM_RIGHT]) {
+			camera.translateX(camSpeed);
+		}
+
+		if(viewPortKeyStates[CAM_FWD]) {
+			camera.translateZ(-camSpeed);
+		}
+
+		if(viewPortKeyStates[CAM_BACK]) {
+			camera.translateZ(camSpeed);
+		}
+
+
+		if(viewPortKeyStates[MOUSE_RMB]) {
+			camera.rotation.x -= mouseMoveY * mouseSens;
+			camera.rotation.y -= mouseMoveX * mouseSens;
+		}
+
 
 		C.lua_getglobal(L, "render");
 

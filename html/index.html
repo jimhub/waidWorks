@@ -15,12 +15,6 @@
 
 		<script src="js/jquery-ui-1.10.3.custom.js"></script>
 
-		<script>
-			$(function() {
-	            $("#mainMenu").menubar();
-	        });
-		</script>
-
 	    <style>
 	    	body, html {
 			    height:100%;
@@ -53,6 +47,11 @@
 	        	position: absolute;
 	        	background: #AA6666;
 	        }
+
+	        #bottomBar {
+	        	position: absolute;
+	        	background: #111111;
+	        }
 	     </style>
 	</head>
 
@@ -62,9 +61,9 @@
 		    <li>
 		        <a href="#navigation">File</a>
 		        <ul>
-		            <li><a href="#open">Open</a></li>
-		            <li><a href="#save">Save</a></li>
-		            <li><a href="#import">Import</a></li>
+		            <li><a tag="open">Open</a></li>
+		            <li><a tag="save">Save</a></li>
+		            <li><a tag="import">Import</a></li>
 		        </ul>
 		    </li>
 		    <li>
@@ -73,42 +72,43 @@
 		            <li>
 		            	<a href="#meh">Meh?</a>
 		            	<ul>
-			                <li><a href="#open">Open</a></li>
-			                <li><a href="#save">Save</a></li>
-			                <li><a href="#import">Import</a></li>
+			                <li><a tag="open">Open</a></li>
+			                <li><a tag="save">Save</a></li>
+			                <li><a tag="import">Import</a></li>
 			            </ul>
 		            </li>
 		        </ul>
 		    </li>
 		    <li><a href="#edit">Object</a>
 		        <ul>
-		            <li><a href="#best">Empty</a></li>
-		            <li><a href="#worst">Cube</a></li>
+		            <li><a tag="addEmpty">Empty</a></li>
+		            <li><a tag="addCube">Cube</a></li>
 		        </ul>
 		   	</li>
 		    <li><a href="#edit">Layout</a>
 		        <ul>
-		            <li><a href="#best">Best Layout</a></li>
-		            <li><a href="#worst">Worst Layout</a></li>
+		            <li><a tag="best">Best Layout</a></li>
+		            <li><a tag="worst">Worst Layout</a></li>
 		        </ul>
 		   	</li>
 		    <li>
 		        <a href="#About">About</a>
 		        <ul>
-		            <li><a href="#about">About this software</a></li>
+		            <li><a tag="about">About this software</a></li>
 		            <li>-</li>
-		            <li><a href="#site">Software Home</a></li>
-		            <li><a href="#documentation">Documentation</a></li>
-		            <li><a href="#support">Support Forums</a></li>
-		            <li><a href="#feedback">Feedback</a></li>
+		            <li><a tag="site">Software Home</a></li>
+		            <li><a tag="documentation">Documentation</a></li>
+		            <li><a tag="support">Support Forums</a></li>
+		            <li><a tag="feedback">Feedback</a></li>
 		        </ul>
 		    </li>
 		</ul>
 
 		<div id="windowContainer"></div>
 			<div id="sceneTreeWindow"></div>
-			<div id="webGLViewport"></div>
+			<div id="webGLViewport" tabindex="1" oncontextmenu="return false;"></div>
 			<div id="propertyWindow"></div>
 		</div>
+		<div id="bottomBar"></div>
 	</body>
 </html>
